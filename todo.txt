@@ -1,0 +1,29 @@
+Momentum - let's do this shit - fucking killed it
+  -u = .45 seems to be a good approximation
+Early stopping with adaptive learning rates and threshold - DONE
+  come up with other rule than no-improvement-in-n
+  think we already did this, with our average-slope-over-interval equation
+matrix implementation instead of vectors
+weight initialization
+speed up of experimentation
+  Training data subsections - DONE
+  Test data subsections, we can always choose a random subsection of these when testing our accuracy, but as mentioned this will not yield as accurate results and should only be used for gaining our rough estimates
+
+make it as good as Network2
+
+online learning
+input output only
+  Resulted in results of 84.22, 84.30, 75.25, after >30 epochs, with a relatively slow rate of progress and low ending with our   [784, 10] network
+
+different neurons, tanh, relu variants
+softmax
+
+IDEAS
+
+What if we made it so that the mini batch size increased inversely proportional to the learning rate?
+
+When we do 1000 training data subsections we get really good accuracy relatively quickly, by the 400th subsection we are getting    88% reliably. This might be worth some further investigation
+
+Automatically determine one HP at a time
+
+Need to have same initial weights and biases when comparing methods, name number of sets to compare against

@@ -1,0 +1,58 @@
+Epoch 0: 9142 / 10000
+Epoch 1: 9275 / 10000
+Epoch 2: 9290 / 10000
+Epoch 3: 9322 / 10000
+Epoch 4: 9407 / 10000
+Epoch 5: 9399 / 10000
+Epoch 6: 9364 / 10000
+Epoch 7: 9399 / 10000
+Epoch 8: 9422 / 10000
+Epoch 9: 9416 / 10000
+Epoch 0: 8236 / 10000
+Epoch 1: 8345 / 10000
+Epoch 2: 8375 / 10000
+Epoch 3: 8379 / 10000
+Epoch 4: 9287 / 10000
+Epoch 5: 9349 / 10000
+Epoch 6: 9374 / 10000
+Epoch 7: 9392 / 10000
+Epoch 8: 9387 / 10000
+Epoch 9: 9420 / 10000
+Epoch 10: 9438 / 10000
+Epoch 11: 9380 / 10000
+Epoch 12: 9400 / 10000
+Reducing eta by factor of 2 to 1.5
+Epoch 13: 9477 / 10000
+Epoch 14: 9485 / 10000
+Epoch 15: 9461 / 10000
+Epoch 16: 9476 / 10000
+Epoch 17: 9477 / 10000
+Reducing eta by factor of 2 to 0.75
+Epoch 18: 9485 / 10000
+Epoch 19: 9484 / 10000
+Epoch 20: 9483 / 10000
+Epoch 21: 9499 / 10000
+Epoch 22: 9500 / 10000
+Epoch 23: 9483 / 10000
+Epoch 24: 9487 / 10000
+Reducing eta by factor of 2 to 0.375
+Epoch 25: 9493 / 10000
+Epoch 26: 9483 / 10000
+Epoch 27: 9486 / 10000
+Epoch 28: 9493 / 10000
+Epoch 29: 9488 / 10000
+Reducing eta by factor of 2 to 0.1875
+Epoch 30: 9491 / 10000
+Epoch 31: 9484 / 10000
+Epoch 32: 9492 / 10000
+Epoch 33: 9492 / 10000
+Epoch 34: 9492 / 10000
+Epoch 35: 9485 / 10000
+Reducing eta by factor of 2 to 0.09375
+Epoch 36: 9489 / 10000
+Epoch 37: 9496 / 10000
+Epoch 38: 9491 / 10000
+Epoch 39: 9493 / 10000
+Epoch 40: 9490 / 10000
+Reducing eta by factor of 2 to 0.046875
+Early stopped with low threshold

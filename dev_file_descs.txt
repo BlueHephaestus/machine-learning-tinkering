@@ -1,0 +1,5 @@
+network_dev1.py
+  Added early stopping with automatic learning rate scheduling with adjustable early stopping threshold, using average slope over interval to determine when to decrease our learning rate.
+
+network_dev2.py
+  Adding momentum-based stochastic gradient descent
