@@ -1,9 +1,14 @@
 import plotly.plotly as py
 import plotly.graph_objs as go
 
-# Create random data with numpy
 import numpy as np
 
+f = open('test_output.txt', 'r')
+
+for config in f.readlines():
+    config_results = json.loads(config)
+    
+    
 N = 50
 x = np.linspace(0, 50, N)
 y0 = 

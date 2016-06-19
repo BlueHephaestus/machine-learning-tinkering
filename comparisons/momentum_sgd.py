@@ -18,7 +18,6 @@ import random
 import numpy as np
 import math
 import json
-import sys#for exiting quickly during debugging
 
 class default_weight_initializer(object):
 
@@ -35,43 +34,9 @@ class large_weight_initializer(object):
         weights = [np.random.randn(y, x) for x, y in zip(sizes[:-1], sizes[1:])]
         return weights
 
-class quadratic_cost(object):
-
-    @staticmethod
-    def total_cost(a, y):
-        return np.sum(np.nan_to_num((-y*np.log(a)+(1-y)*np.log(1-a))))
-
-    @staticmethod
-    def delta(a, y, z):
-        #Where the given vectors are one dimensional so we don't have to [-1]
-        return (a-y) * sigmoid_prime(z)
-
-class cross_entropy_cost(object):
-    
-    @staticmethod
-    def total_cost(a, y):
-        return (1/2)*np.linalg.norm(a-y)**2
-
-    @staticmethod
-    def delta(a, y, z):
-        #Where the given vectors are one dimensional so we don't have to [-1]
-        return (a-y)
-
-class l2_regularization(object):
-
-    @staticmethod
-    def cost_term(lmbda, n, weights):
-        return (lmbda/(2.0*n))*sum(np.linalg.norm(w)**2 for w in weights)
-
-class l1_regularization(object):
-
-    @staticmethod
-    def cost_term(lmbda, n, weights):
-        return (lmbda/n)*sum(np.linalg.norm(weights))
-
 class Network(object):
 
-    def __init__(self, sizes, output_filename, weight_init=default_weight_initializer, softmax=True, cost=cross_entropy_cost, regularization=l2_regularization):
+    def __init__(self, sizes, output_filename, weight_init=default_weight_initializer):
         """The list ``sizes`` contains the number of neurons in the respective layers of the network.  For example, if the list
         was [2, 3, 1] then it would be a three-layer network, with the first layer containing 2 neurons, the second layer 3 neurons,
         and the third layer 1 neuron.  The biases and weights for the network are initialized randomly, using a Gaussian
@@ -79,16 +44,11 @@ class Network(object):
         won't set any biases for those neurons, since biases are only ever used in computing the outputs from later layers."""
         self.num_layers = len(sizes)
         self.sizes = sizes
-        self.biases = [np.random.randn(y, 1) for y in self.sizes[1:]]
-        self.weight_init = weight_init
-        self.weights = self.weight_init.initialize(self.sizes)
-
+        self.biases = [np.random.randn(y, 1) for y in sizes[1:]]
+        self.weights = weight_init.initialize(self.sizes)
         self.output_dict = {}
-        self.output_filename = output_filename
 
-        self.regularization=regularization
-        self.cost=cost
-        self.softmax=softmax
+        self.output_filename = output_filename
         #For momentum sgd
         #Should be all good with initial v of 0, makes sense heuristically from our analogy
         
@@ -102,23 +62,11 @@ class Network(object):
     def feedforward(self, a):
         """Return the output of the network if ``a`` is input."""
         #So that we continually update it, thanks to our previous init function for weights and biases we can make this very small.
-        for i, (b, w) in enumerate(zip(self.biases, self.weights)):
-            if self.softmax:
-                if i == len(self.biases)-1:
-                    #If output layer, we do our softmax
-                    z = np.dot(w, a)+b
-                    a = np.exp(z)/sum(np.exp(z))
-                else:
-                    a = sigmoid(np.dot(w, a)+b)
-            else:
-                a = sigmoid(np.dot(w, a)+b)
+        for b, w in zip(self.biases, self.weights):
+            a = sigmoid(np.dot(w, a)+b)
         return a
 
-    def SGD(self, training_data, epochs, mini_batch_size, eta, test_accuracy_check_interval, eta_decrease_rate, momentum_coefficient, lmbda, 
-            training_data_subsections=None, validation_data=None, test_data=None,
-            early_stopping=True,
-            output_training_cost=False, output_training_accuracy=False, output_validation_cost=False, output_validation_accuracy=False, output_test_cost=False, output_test_accuracy=True,
-            output_types=1, config_num=1,run_count=1):
+    def SGD(self, training_data, epochs, mini_batch_size, eta, test_accuracy_check_interval, eta_decrease_rate, momentum_coefficient, training_data_subsections=None, test_data=None, run_count=1):
         """Train the neural network using mini-batch stochastic gradient descent.  The ``training_data`` is a list of tuples
         ``(x, y)`` representing the training inputs and the desired outputs.  The other non-optional parameters are
         self-explanatory.  If ``test_data`` is provided then the network will be evaluated against the test data after each
@@ -135,12 +83,8 @@ class Network(object):
             eta_stop_threshold = eta * math.pow(self.eta_decrease_rate, -6)
 
         self.momentum_coefficient = momentum_coefficient
-        self.lmbda = lmbda
         n = len(training_data)
         for r in range(run_count):
-            #Re initialize everything
-            self.biases = [np.random.randn(y, 1) for y in self.sizes[1:]]
-            self.weights = self.weight_init.initialize(self.sizes)
             self.output_dict[r] = {}
             a_test_accuracy = []
             for j in xrange(epochs):
@@ -162,128 +106,65 @@ class Network(object):
                         mini_batches = [training_data_subsection[k:k+mini_batch_size] for k in xrange(0, training_data_subsection_size, mini_batch_size)]
                         for mini_batch in mini_batches:
                             #Do our backpropogation
-                            self.update_mini_batch(mini_batch, eta, n)
+                            self.update_mini_batch(mini_batch, eta)
 
-                        #Since we'd have tons of these to accomodate the various scenarios, we just omit the data for the graphs to show.
-                        print "Config {0}, Run {1}, Epoch {2}, Training Data Subsection {3}".format(config_num, r, j, training_data_subsection_num)
+                        '''
+                        if test_data:
+                        '''
+                        test_data_accuracy = self.evaluate(test_data)
+                        #Give us our percentage
+                        test_data_accuracy = ((100.0*test_data_accuracy)/n_test)
+                        print "Run {0}, Epoch {1}, Training Data Subsection {2}: {3}%".format(r, j, training_data_subsection_num, test_data_accuracy)
+                        self.output_dict[r][j][training_data_subsection_num] = test_data_accuracy
 
-                        #our various output monitoring choices
-                        if test_data or validation_data or output_training_cost or output_training_accuracy:
-                            self.output_dict[r][j][training_data_subsection_num] = []
-                            if output_training_cost:
-                                training_cost = self.total_cost(training_data, lmbda, convert=True)
-                                self.output_dict[r][j][training_data_subsection_num].append(training_cost)
-                                print "\tTraining Cost: {0}".format(training_cost)
-                            if output_training_accuracy:
-                                training_accuracy_perc = self.accuracy(training_data, convert=True)
-                                self.output_dict[r][j][training_data_subsection_num].append(training_accuracy_perc)
-                                print "\tTraining Accuracy: {0}%".format(training_accuracy_perc)
-
-                            if validation_data:
-                                if output_validation_cost:
-                                    validation_cost = self.total_cost(validation_data, lmbda)
-                                    self.output_dict[r][j][training_data_subsection_num].append(validation_cost)
-                                    print "\tValidation Cost: {0}".format(validation_cost)
-                                if output_validation_accuracy:
-                                    validation_accuracy_perc = self.accuracy(validation_data)
-                                    self.output_dict[r][j][training_data_subsection_num].append(validation_accuracy_perc)
-                                    print "\tValidation Accuracy: {0}%".format(validation_accuracy_perc)
-
-                            if test_data:
-                                if output_test_cost:
-                                    test_cost = self.total_cost(test_data, lmbda)
-                                    self.output_dict[r][j][training_data_subsection_num].append(test_cost)
-                                    print "\tTest Cost: {0}".format(test_cost)
-
-                                if output_test_accuracy:
-                                    test_accuracy_perc = self.accuracy(test_data)
-                                    #Give us our raw number by reversing our percentage equation, we need this for our early stopping. Then again, we could also do this according to validation data if we want. We can make a functio nto check it with if we so wish.
-                                    test_accuracy = (test_accuracy_perc*n_test)/100.0
-                                    #print "Config {0}, Run {1}, Epoch {2}, Training Data Subsection {3}: {4}%".format(config_num, r, j, training_data_subsection_num, test_data_accuracy_perc)
-                                    self.output_dict[r][j][training_data_subsection_num].append(test_accuracy_perc)
-                                    print "\tTest Accuracy: {0}%".format(test_accuracy_perc)
                         '''
                         else:
                             print "Epoch {0} complete".format(j)
                         '''
-
                         training_data_subsection_num+=1
                 else:
-                    #otherwise we just chill with normal epochs, still doing our normal monitoring checks
+                    #otherwise we just chill with normal epochs
                     mini_batches = [training_data[k:k+mini_batch_size] for k in xrange(0, n, mini_batch_size)]
                     for mini_batch in mini_batches:
                         #Do our backpropogation
-                        self.update_mini_batch(mini_batch, eta, n)
+                        self.update_mini_batch(mini_batch, eta)
 
-                    print "Epoch {0} complete".format(j)
-                    if test_data or validation_data or output_training_cost or output_training_accuracy:
-                        self.output_dict[r][j] = []
-                        if output_training_cost:
-                            training_cost = self.total_cost(training_data, lmbda, convert=True)
-                            self.output_dict[r][j].append(training_cost)
-                            print "\tTraining Cost: {0}".format(training_cost)
-                        if output_training_accuracy:
-                            training_accuracy_perc = self.accuracy(training_data, convert=True)
-                            self.output_dict[r][j].append(training_accuracy_perc)
-                            print "\tTraining Accuracy: {0}%".format(training_accuracy_perc)
-
-                        if validation_data:
-                            if output_validation_cost:
-                                validation_cost = self.total_cost(validation_data, lmbda)
-                                self.output_dict[r][j].append(validation_cost)
-                                print "\tValidation Cost: {0}".format(validation_cost)
-                            if output_validation_accuracy:
-                                validation_accuracy_perc = self.accuracy(validation_data)
-                                self.output_dict[r][j].append(validation_accuracy_perc)
-                                print "\tValidation Accuracy: {0}%".format(validation_accuracy_perc)
-
-                        if test_data:
-                            if output_test_cost:
-                                test_cost = self.total_cost(test_data, lmbda)
-                                self.output_dict[r][j].append(test_cost)
-                                print "\tTest Cost: {0}".format(test_cost)
-
-                            if output_test_accuracy:
-                                test_accuracy_perc = self.accuracy(test_data)
-                                #Give us our raw number by reversing our percentage equation, we need this for our early stopping. Then again, we could also do this according to validation data if we want. We can make a functio nto check it with if we so wish.
-                                test_accuracy = (test_accuracy_perc*n_test)/100.0
-                                #print "Config {0}, Run {1}, Epoch {2}, Training Data Subsection {3}: {4}%".format(config_num, r, j, training_data_subsection_num, test_data_accuracy_perc)
-                                self.output_dict[r][j].append(test_accuracy_perc)
-                                print "\tTest Accuracy: {0}%".format(test_accuracy_perc)
                     '''
                     if test_data:
-                        test_data_accuracy = self.evaluate(test_data)
-                        test_data_perc = ((100.0*test_data_accuracy)/n_test)
-                        print "Config {0}, Run {0}, Epoch {1}: {2}%".format(config_num, r, j, test_data_perc)
-                        self.output_dict[r][j] = test_data_perc
+                    '''
+                    test_data_accuracy = self.evaluate(test_data)
+                    test_data_accuracy = ((100.0*test_data_accuracy)/n_test)
+                    print "Run {0}, Epoch {1}: {2}%".format(r, j, test_data_accuracy)
+                    self.output_dict[r][j] = test_data_accuracy
+
+                    '''
                     else:
                         print "Epoch {0} complete".format(j)
                     '''
 
 
-                if early_stopping:
-                    #Since we only want to check this every epoch, not every training data subsection
-                    a_test_accuracy.append(test_accuracy)
+                #Since we only want to check this every epoch, not every training data subsection
+                a_test_accuracy.append(test_data_accuracy)
 
-                    if len(a_test_accuracy) >= self.test_accuracy_check_interval:
-                        #Do our checks on the last check_interval number of accuracy results(which is the size of the array)
-                        #Checks = 
-                            #get average slope of interval
-                                #(interval * sigma(x*y) - sigma(x)*sigma(y)) / (interval * sigma(x**2) - (sigma(x))**2)
-                                #where x is each # in our interval 1, 2, 3... interval
-                                # and y is each of our accuracies
-                        test_accuracy_avg_slope = (self.test_accuracy_check_interval*1.0*sigma(list_product(a_test_x, a_test_accuracy)) - sigma(a_test_x) * 1.0 * sigma(a_test_accuracy))/(self.test_accuracy_check_interval*sigma([x**2 for x in a_test_x])*1.0 - (sigma(a_test_x))**2)
-                        if test_accuracy_avg_slope < 1.0:
-                            eta /= self.eta_decrease_rate
-                            print "Reducing eta by factor of {0} to {1}".format(self.eta_decrease_rate, eta)
-                            if eta <= eta_stop_threshold:
-                                print "Early stopped with low threshold"
-                                break
-                            #If we decrease the learning rate, we reset the interval by clearing our a_test_accuracy
-                            a_test_accuracy = []
-                        else:
-                            #remove the first element
-                            a_test_accuracy.pop(0)
+                if len(a_test_accuracy) >= self.test_accuracy_check_interval:
+                    #Do our checks on the last check_interval number of accuracy results(which is the size of the array)
+                    #Checks = 
+                        #get average slope of interval
+                            #(interval * sigma(x*y) - sigma(x)*sigma(y)) / (interval * sigma(x**2) - (sigma(x))**2)
+                            #where x is each # in our interval 1, 2, 3... interval
+                            # and y is each of our accuracies
+                    test_accuracy_avg_slope = (self.test_accuracy_check_interval*sigma(list_product(a_test_x, a_test_accuracy)) - sigma(a_test_x) * sigma(a_test_accuracy))/(self.test_accuracy_check_interval*sigma([x**2 for x in a_test_x])*1.0 - (sigma(a_test_x))**2)
+                    if test_accuracy_avg_slope < 1:
+                        eta /= self.eta_decrease_rate
+                        print "Reducing eta by factor of {0} to {1}".format(self.eta_decrease_rate, eta)
+                        if eta <= eta_stop_threshold:
+                            print "Early stopped with low threshold"
+                            break
+                        #If we decrease the learning rate, we reset the interval by clearing our a_test_accuracy
+                        a_test_accuracy = []
+                    else:
+                        #remove the first element
+                        a_test_accuracy.pop(0)
 
         #After all runs have executed
 
@@ -295,15 +176,11 @@ class Network(object):
                 self.output_dict[run_count+1][j] = {}#For our new average entry
                 if training_data_subsections:
                     for s in range(training_data_subsections):
-                        self.output_dict[run_count+1][j][s] = []#For our new average entry
-                        for o in range(output_types):
-                            avg = sum([self.output_dict[r][j][s][o] for r in range(run_count)]) / run_count
-                            self.output_dict[run_count+1][j][s].append(avg)
+                        avg = sum([self.output_dict[r][j][s] for r in range(run_count)]) / run_count
+                        self.output_dict[run_count+1][j][s] = avg
                 else:
-                    self.output_dict[run_count+1][j] = []#For our new average entry
-                    for o in range(output_types):
-                        avg = sum([self.output_dict[r][j][o] for r in range(run_count)]) / run_count
-                        self.output_dict[run_count+1][j].append(avg)
+                    avg = sum([self.output_dict[r][j] for r in range(run_count)]) / run_count
+                    self.output_dict[run_count+1][j] = avg
 
         #Write our dictionary as a json
         f = open('{0}_output.txt'.format(self.output_filename), 'a')
@@ -313,7 +190,7 @@ class Network(object):
         #wrap up by closing our file behind us.
         f.close()
 
-    def update_mini_batch(self, mini_batch, eta, n):
+    def update_mini_batch(self, mini_batch, eta):
         """Update the network's weights and biases by applying gradient descent using backpropagation to a single mini batch.
         The ``mini_batch`` is a list of tuples ``(x, y)``, and ``eta`` is the learning rate."""
         nabla_b = [np.zeros(b.shape) for b in self.biases]
@@ -341,9 +218,7 @@ class Network(object):
         self.b_velocities = [self.momentum_coefficient*v - (eta/len(mini_batch))*nb
                 for v, nb in zip(self.b_velocities, nabla_b)]
 
-        #Where we add our l2 regularization to our weights
-        #Should we pass in the len of our training data in a different way? If we end up using the entire data in here for another purpose we'll do that.
-        self.weights = [(1-((eta*self.lmbda)/n))*w + v 
+        self.weights = [w + v 
                 for w, v, in zip(self.weights, self.w_velocities)]
         self.biases = [b + v 
                 for b, v, in zip(self.biases, self.b_velocities)]
@@ -368,7 +243,6 @@ class Network(object):
         zs = [] # list to store all the z vectors, layer by layer
         for b, w in zip(self.biases, self.weights):
             #Starting with our basic x for input, we keep going through the network, doing our sigmoid(wa+b)
-            #Should this be softmax? Why would it not?
             z = np.dot(w, activation)+b
             zs.append(z)
             activation = sigmoid(z)
@@ -378,11 +252,9 @@ class Network(object):
 
         #This is essentially our equation 1b, where 
         #error of last layer = output activations of last layer - y(desired output of last layer) hadamard product of the sigmoid's first derivative of the weighted inputs for the output layer
-        #Apparently python treats * as the same thing as the hadamard product(<3 u python)
+        #Apparently python treats * as the same thing as the hadamard product
         #Delta is a horrible name for this, we always refer to it as error so why suddenly call it the variable name (lowercase delta). I don't like it, just like with nabla
-        #this is specific to the quad cost, we will fix this.
-        #delta = self.cost_derivative(activations[-1], y) * sigmoid_prime(zs[-1])
-        delta = self.cost.delta(activations[-1], y, zs[-1])
+        delta = self.cost_derivative(activations[-1], y) * sigmoid_prime(zs[-1])
         #Our rate of change of our cost C with respect to any bias/neuron in the network is simply the delta for that neuron
         #See: Equation 3a
         nabla_b[-1] = delta
@@ -411,50 +283,7 @@ class Network(object):
             nabla_w[-l] = np.dot(delta, activations[-l-1].transpose())
         return (nabla_b, nabla_w)
 
-    '''Pertaining to the convert parameter in the following functions:
-    we only convert if it's for the training data, where the y values are vectors of 0s and a 1 for the correct value,
-    We have convert=False if it's for the validation or test data where we already have the argmax of our vector,
-        And we actually need to get a vector for this in our total cost function to get back to this vector.
-        So maybe it would be better to switch the decisions for convert, but it would be confusing to compare the two.
-    '''
-    def total_cost(self, data, lmbda, convert=False):
-        #return the total cost on our data with our regularization term
-        cost = 0
-        n = len(data)
-        for x, y in data:
-            a = self.feedforward(x)
-            if not convert:
-                y = vectorized_result(y)
-            cost += self.cost.total_cost(a, y)
-        #Add our term, we will have an extra thing for dropout when we add it.
-        
-        cost += self.regularization.cost_term(lmbda, n, self.weights)
-        return cost
-
-    def accuracy(self, data, convert=False):
-        #return a percent accuracy score on the data
-        n = len(data)
-        #relatively straightforward, we do argmax so we have a final decision for the data from our distribution of outputs to compare against desired result
-        #straightforward? more like feedforward if you know what i'm sayin hahaha fucking kill me XD
-        if convert:
-            #For training data
-            results = [(np.argmax(self.feedforward(x)), np.argmax(y)) for (x, y) in data]
-        else:
-            #if validation or test data
-            results = [(np.argmax(self.feedforward(x)), y) for (x, y) in data]
-        #then we get the number of ones correct, where x == y in our results. We do this by summing the array in a clever way that I learned from him here
-        results = sum(int(x == y) for x, y in results)
-        #then we get our percentage
-        results_perc = 100.0*(results/float(n))
-        '''
-        print results, results_perc, float(n)
-        print "{0}%".format(results_perc)
-        '''
-        return results_perc
-
-'''
     def evaluate(self, test_data):
-
         """Return the number of test inputs for which the neural network outputs the correct result. Note that the neural
         network's output is assumed to be the index of whichever neuron in the final layer has the highest activation."""
         #We do this if test data is supplied when we go through each epoch
@@ -462,14 +291,11 @@ class Network(object):
                         for (x, y) in test_data]
         return sum(int(x == y) for (x, y) in test_results)
 
-'''
-'''
     def cost_derivative(self, output_activations, y):
         """Return the vector of partial derivatives \partial C_x / \partial a for the output activations."""
         #Remember that this is computing our nabla (gradient vector) of C with respect to our output activations. This means it's the vector of partial derivatives 6C/6a for each neuron j in our output layer, which we can compute by taking the output activations - desired output activations
         #It's still a-y in this function if we were doing cross_entropy, but without the sigmoid_prime multiplication we do where this is referenced, for the reasons specified in the notes.
         return (output_activations-y)
-'''
 
 #### Miscellaneous functions
 def sigmoid(z):
@@ -501,8 +327,3 @@ def sigma(a):
 def list_product(a_x, a_y):
     return [x*y for x, y in zip(a_x, a_y)]
 
-def vectorized_result(y):
-    #return a 10 unit vector with the yth value as 1 and every other value as 0
-    a = np.zeros((10, 1))
-    a[y] = 1.0
-    return a

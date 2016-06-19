@@ -1,24 +1,22 @@
 #So we have similarities to use for our graphing / these need to be the same for it to be more or less reasonable
 #Basically these are our global things
 configs = 2
-output_types = 2
+output_types = 6
 run_count = 4 
-epochs = 400
-training_data_subsections=None
-early_stopping=False
-
-output_training_cost=False
-output_training_accuracy=False
-output_validation_cost=False
-output_validation_accuracy=True
-output_test_cost=False
-output_test_accuracy=True
+epochs = 10
+training_data_subsections=50
+output_training_cost=True,
+output_training_accuracy=True,
+output_validation_cost=True,
+output_validation_accuracy=True,
+output_test_cost=True,
+output_test_accuracy=True,
 
 comparison_title="Regularization vs no regularization"
 comparison_file="regularization_comparison"
 xaxis_title="Epoch Subsection"
 yaxis_title="MNIST % Accuracy"
-update_output = True
+update_output = False
 graph_output = True
 #Will by default subplot the output types, will make config*outputs if that option is specified as well.
 subplot_seperate_configs = True
@@ -43,12 +41,11 @@ if update_output:
             3.0,#eta
             5,#test_accuracy_check_interval
             2,#eta_decrease_factor
-            0,#u
-            2.0,#lmbda / regularization rate
+            .2,#u
+            0,#lmbda / regularization rate
             training_data_subsections=training_data_subsections, 
             validation_data=validation_data,
             test_data=test_data,
-            early_stopping=early_stopping,
             output_training_cost=output_training_cost,
             output_training_accuracy=output_training_accuracy,
             output_validation_cost=output_validation_cost,
@@ -67,12 +64,11 @@ if update_output:
             3.0,#eta
             5,#test_accuracy_check_interval
             2,#eta_decrease_factor
-            0,#u
-            0,#lmbda / regularization rate
+            .2,#u
+            2.0,#lmbda / regularization rate
             training_data_subsections=training_data_subsections, 
             validation_data=validation_data,
             test_data=test_data,
-            early_stopping=early_stopping,
             output_training_cost=output_training_cost,
             output_training_accuracy=output_training_accuracy,
             output_validation_cost=output_validation_cost,
@@ -142,34 +138,32 @@ if graph_output:
         else:
             N = epochs
             x = np.linspace(0, N, N)
-            for output_type in range(output_types):
-                traces[config_num].append([])
-                for r in config_results:
-                    y = []
-                    for j in config_results[r]:
-                        y.append(config_results[r][j][output_type])
-                    if int(r) >= run_count:
-                        #Our final, average run
-                        trace = go.Scatter(
-                            x = x,
-                            y = y,
-                            line = dict(
-                                width = 4
-                            ),
-                            name="Average Run",
-                            mode="line"
-                        )
-                    else:
-                        trace = go.Scatter(
-                            x = x,
-                            y = y,
-                            line = dict(
-                                width = 1,
-                                dash = "dot"
-                            ),
-                            name="Test Run #{0}".format(r)
-                        )
-                    traces[config_num][output_type].append(trace)
+            for r in config_results:
+                y = []
+                for j in config_results[r]:
+                    y.append(config_results[r][j])
+                if int(r) >= run_count:
+                    #Our final, average run
+                    trace = go.Scatter(
+                        x = x,
+                        y = y,
+                        line = dict(
+                            width = 4
+                        ),
+                        name="Average Run",
+                        mode="line"
+                    )
+                else:
+                    trace = go.Scatter(
+                        x = x,
+                        y = y,
+                        line = dict(
+                            width = 1,
+                            dash = "dot"
+                        ),
+                        name="Test Run #{0}".format(r)
+                    )
+                traces.append(trace)
         config_num+=1
         
     #print traces

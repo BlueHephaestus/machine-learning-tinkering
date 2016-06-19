@@ -90,14 +90,18 @@ class Network(object):
         self.mini_batch_size = mini_batch_size
         #for each layer, get all params, and add that to our array so that params becomes all the params in all layers into one list
         self.params = [param for layer in self.layers for param in layer.params]
+        #initialized as symbolic variables with theano, this makes it easier and faster to do sgd and backpropagation
         self.x = T.matrix("x")
         self.y = T.ivector("y")
         init_layer = self.layers[0]
+        #define symbolic outputs from our network, we set our inputs one mini batch at a time
         init_layer.set_inpt(self.x, self.x, self.mini_batch_size)
         for j in xrange(1, len(self.layers)):
+            #we then propogate our self.x symbolic variable through the network layers
             prev_layer, layer  = self.layers[j-1], self.layers[j]
             layer.set_inpt(
                 prev_layer.output, prev_layer.output_dropout, self.mini_batch_size)
+        #now that we've propogated our x symbolic variable through the network we can symbolically represent our Network output with the following
         self.output = self.layers[-1].output
         self.output_dropout = self.layers[-1].output_dropout
 
@@ -115,8 +119,8 @@ class Network(object):
 
         # define the (regularized) cost function, symbolic gradients, and updates
         l2_norm_squared = sum([(layer.w**2).sum() for layer in self.layers])
-        cost = self.layers[-1].cost(self)+\
-               0.5*lmbda*l2_norm_squared/num_training_batches
+        cost = self.layers[-1].cost(self)+0.5*lmbda*l2_norm_squared/num_training_batches
+        #Get our gradients and updates for each parameter for us to update mini batch with
         grads = T.grad(cost, self.params)
         updates = [(param, param-eta*grad)
                    for param, grad in zip(self.params, grads)]
@@ -224,12 +228,16 @@ class ConvPoolLayer(object):
         self.params = [self.w, self.b]
 
     def set_inpt(self, inpt, inpt_dropout, mini_batch_size):
+        #we reshape our inputs accordingly,
         self.inpt = inpt.reshape(self.image_shape)
+        #we get our filters from our weights and the shape(height & width) from when we initialize the layer)
         conv_out = conv.conv2d(
             input=self.inpt, filters=self.w, filter_shape=self.filter_shape,
             image_shape=self.image_shape)
+        #We get our pooling output from the poolsize we specify, and I guess theano does the rest
         pooled_out = downsample.max_pool_2d(
             input=conv_out, ds=self.poolsize, ignore_border=True)
+        #I have no idea what dimshuffle does, maybe it takes our previous 4 neurons and makes it into 1?  it says it permutes dimensions
         self.output = self.activation_fn(
             pooled_out + self.b.dimshuffle('x', 0, 'x', 'x'))
         self.output_dropout = self.output # no dropout in the convolutional layers
@@ -257,12 +265,25 @@ class FullyConnectedLayer(object):
         self.params = [self.w, self.b]
 
     def set_inpt(self, inpt, inpt_dropout, mini_batch_size):
+        #we only use these two layers for evaluating accuracy on the validation and test data
+        #This is a LAYER, not an entire network. So it's just one hidden layer we are accounting for
+        #We make the input values of width mini_batch_size, and of height n_in the number of them there are.
         self.inpt = inpt.reshape((mini_batch_size, self.n_in))
+        #We make the output of our network equal to the following:
+            '''if we had 55% dropout, then we drop 45% of these. We do that by doing 1-55, then we multiply our dropout perc(.45) to our transposed matrices/vectors 
+            by the matrices/vectors of our output activations from the previous layer times our weights, plus our bias. Then we plug that into our activation function and
+            we've got o(wa+b)'''
+
         self.output = self.activation_fn(
             (1-self.p_dropout)*T.dot(self.inpt, self.w) + self.b)
+        #Then the y output is just the transposed argmax of our output
         self.y_out = T.argmax(self.output, axis=1)
+
+        #we use the following two for our actual training(if we choose dropout, of course)
+        #removes p_dropout percentage of the neurons in our layer
         self.inpt_dropout = dropout_layer(
             inpt_dropout.reshape((mini_batch_size, self.n_in)), self.p_dropout)
+        #Gets the output from our crippled and emotionally damaged (input dropout) layer
         self.output_dropout = self.activation_fn(
             T.dot(self.inpt_dropout, self.w) + self.b)
 
@@ -276,7 +297,7 @@ class SoftmaxLayer(object):
         self.n_in = n_in
         self.n_out = n_out
         self.p_dropout = p_dropout
-        # Initialize weights and biases
+        # Initialize weights and biases to 0 because it works better for softmax
         self.w = theano.shared(
             np.zeros((n_in, n_out), dtype=theano.config.floatX),
             name='w', borrow=True)
