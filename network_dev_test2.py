@@ -1,3 +1,4 @@
+import time#For unix timestamp generation of our filenames
 #So we have similarities to use for our graphing / these need to be the same for it to be more or less reasonable
 #Basically these are our global things
 configs = 2
@@ -15,7 +16,7 @@ output_test_cost=False
 output_test_accuracy=True
 
 comparison_title="Regularization vs no regularization"
-comparison_file="regularization_comparison"
+comparison_file="regularization_comparison-{0}".format(str(time.time()))
 xaxis_title="Epoch Subsection"
 yaxis_title="MNIST % Accuracy"
 update_output = True
@@ -36,11 +37,11 @@ if update_output:
     f = open('{0}_output.txt'.format(comparison_file), 'w').close()
     
     config_count = 0
-    net = network_dev2.Network([784, 30, 10], output_filename=comparison_file, softmax=False, cost=network_dev2.quadratic_cost)
+    net = network_dev2.Network([784, 30, 10], output_filename=comparison_file, softmax=False, cost=network_dev2.quadratic_cost, weight_init=network_dev2.large_weight_initializer)
     net.SGD(training_data, 
             epochs, #epochs
             10,#m
-            3.0,#eta
+            0.5,#eta
             5,#test_accuracy_check_interval
             2,#eta_decrease_factor
             0,#u
@@ -60,11 +61,11 @@ if update_output:
             run_count=run_count)
 
     config_count += 1
-    net = network_dev2.Network([784, 30, 10], output_filename=comparison_file, softmax=False, cost=network_dev2.quadratic_cost)
+    net = network_dev2.Network([784, 30, 10], output_filename=comparison_file, softmax=False, cost=network_dev2.quadratic_cost, weight_init=network_dev2.large_weight_initializer)
     net.SGD(training_data, 
             epochs, #epochs
             10,#m
-            3.0,#eta
+            0.5,#eta
             5,#test_accuracy_check_interval
             2,#eta_decrease_factor
             0,#u
@@ -187,7 +188,9 @@ if graph_output:
                     fig.append_trace(run, row_num, col_num)
                 col_num+=1
 
-        fig["layout"].update(title=comparison_title)
+        #fig["layout"].update(title=comparison_title, yaxis=dict(autotick=False, dtick=1.0, range=[75, 87]))
+        #fig["layout"]["yaxis1"].update(yaxis=dict(dtick=1.0, range=[75,87]))
+        #fig["layout"].update(title=comparison_title, yaxis=dict(autotick=False, range=[85.8, 87.2))
         '''
         for xaxis_num in range(1,configs+1):
             fig["layout"]["xaxis{0}".format(xaxis_num)].update(title=xaxis_title)

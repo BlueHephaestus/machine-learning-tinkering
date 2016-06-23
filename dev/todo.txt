@@ -1,0 +1,41 @@
+Momentum 
+  After graphing this i'm not sure we've implemented it correctly. If so, we might need more tests or harder problems to see the influence. Going to try with less training data.
+  with training data [:1000] u = .7 
+  with full training data(more relevant) u = .5
+  test this later with harder problems to see if it makes a difference as well
+  
+Early stopping with adaptive learning rates and threshold - DONE
+  come up with other rule than no-improvement-in-n
+  think we already did this, with our average-slope-over-interval equation
+matrix implementation instead of vectors
+weight initialization - done
+speed up of experimentation
+  our graph system - functional but can always be improved
+    Metadata for each config to use?
+    make it so it's 0, 1, 2 not 0, 1, 3
+  Training data subsections - DONE
+  Test data subsections, we can always choose a random subsection of these when testing our accuracy, but as mentioned this will not yield as accurate results and should only be used for gaining our rough estimates - DONE
+
+make it as good as Network2
+
+online learning
+input output only
+  Resulted in results of 84.22, 84.30, 75.25, after >30 epochs, with a relatively slow rate of progress and low ending with our   [784, 10] network
+
+different neurons, tanh, relu variants
+different cost functions
+  -checking to see if gucci
+softmax - done, easy.
+regularization - L1, L2, D-d-d-drop the out
+  -l2 - 2.0 lambda is good
+
+log likelihood
+IDEAS
+
+What if we made it so that the mini batch size increased inversely proportional to the learning rate?
+
+When we do 1000 training data subsections we get really good accuracy relatively quickly, by the 400th subsection we are getting    88% reliably. This might be worth some further investigation
+
+Automatically determine one HP at a time
+
+Need to have same initial weights and biases when comparing methods, name number of sets to compare against

@@ -23,8 +23,10 @@ input output only
 
 different neurons, tanh, relu variants
 different cost functions
+  -checking to see if gucci
 softmax - done, easy.
 regularization - L1, L2, D-d-d-drop the out
+  -checking to see if our regularization is already working
 
 log likelihood
 IDEAS

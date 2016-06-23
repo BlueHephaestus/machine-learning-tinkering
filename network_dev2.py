@@ -7,6 +7,7 @@ using backpropagation.  Note that I have focused on making the code simple, easi
 and omits many desirable features.
 
 
+I added a lot more,
 ayylmao -DE
 """
 
@@ -39,7 +40,7 @@ class quadratic_cost(object):
 
     @staticmethod
     def total_cost(a, y):
-        return np.sum(np.nan_to_num((-y*np.log(a)+(1-y)*np.log(1-a))))
+        return (1/2)*np.linalg.norm(a-y)**2
 
     @staticmethod
     def delta(a, y, z):
@@ -47,15 +48,30 @@ class quadratic_cost(object):
         return (a-y) * sigmoid_prime(z)
 
 class cross_entropy_cost(object):
+    #this can actually be written two ways and he programs it in a different way than it seems he explains it, you can do it as - in front of everything or do 
+    #-y*ln(a) - (1-y)*ln(1-a)
+    #I'm doing it the way it's explained.
     
     @staticmethod
     def total_cost(a, y):
-        return (1/2)*np.linalg.norm(a-y)**2
+        return -np.sum(np.nan_to_num((y*np.log(a)+(1-y)*np.log(1-a))))
 
     @staticmethod
     def delta(a, y, z):
         #Where the given vectors are one dimensional so we don't have to [-1]
         return (a-y)
+
+class log_likelihood_cost(object):
+
+    @staticmethod
+    def total_cost(a, y):
+        return -np.log(np.linalg.norm(a-y)**2)
+
+    @staticmethod
+    def delta(a, y, z):
+        #Where the given vectors are one dimensional so we don't have to [-1]
+        return (a-y)
+    
 
 class l2_regularization(object):
 
@@ -117,8 +133,8 @@ class Network(object):
     def SGD(self, training_data, epochs, mini_batch_size, eta, test_accuracy_check_interval, eta_decrease_rate, momentum_coefficient, lmbda, 
             training_data_subsections=None, validation_data=None, test_data=None,
             early_stopping=True,
-            output_training_cost=False, output_training_accuracy=False, output_validation_cost=False, output_validation_accuracy=False, output_test_cost=False, output_test_accuracy=True,
-            output_types=1, config_num=1,run_count=1):
+            output_training_cost=False, output_training_accuracy=False, output_validation_cost=False, output_validation_accuracy=False, output_test_cost=False, output_test_accuracy=True, print_results=True,
+            config_num=1, output_types=1, run_count=1):
         """Train the neural network using mini-batch stochastic gradient descent.  The ``training_data`` is a list of tuples
         ``(x, y)`` representing the training inputs and the desired outputs.  The other non-optional parameters are
         self-explanatory.  If ``test_data`` is provided then the network will be evaluated against the test data after each
@@ -173,27 +189,27 @@ class Network(object):
                             if output_training_cost:
                                 training_cost = self.total_cost(training_data, lmbda, convert=True)
                                 self.output_dict[r][j][training_data_subsection_num].append(training_cost)
-                                print "\tTraining Cost: {0}".format(training_cost)
+                                if print_results: print "\tTraining Cost: {0}".format(training_cost)
                             if output_training_accuracy:
                                 training_accuracy_perc = self.accuracy(training_data, convert=True)
                                 self.output_dict[r][j][training_data_subsection_num].append(training_accuracy_perc)
-                                print "\tTraining Accuracy: {0}%".format(training_accuracy_perc)
+                                if print_results: print "\tTraining Accuracy: {0}%".format(training_accuracy_perc)
 
                             if validation_data:
                                 if output_validation_cost:
                                     validation_cost = self.total_cost(validation_data, lmbda)
                                     self.output_dict[r][j][training_data_subsection_num].append(validation_cost)
-                                    print "\tValidation Cost: {0}".format(validation_cost)
+                                    if print_results: print "\tValidation Cost: {0}".format(validation_cost)
                                 if output_validation_accuracy:
                                     validation_accuracy_perc = self.accuracy(validation_data)
                                     self.output_dict[r][j][training_data_subsection_num].append(validation_accuracy_perc)
-                                    print "\tValidation Accuracy: {0}%".format(validation_accuracy_perc)
+                                    if print_results: print "\tValidation Accuracy: {0}%".format(validation_accuracy_perc)
 
                             if test_data:
                                 if output_test_cost:
                                     test_cost = self.total_cost(test_data, lmbda)
                                     self.output_dict[r][j][training_data_subsection_num].append(test_cost)
-                                    print "\tTest Cost: {0}".format(test_cost)
+                                    if print_results: print "\tTest Cost: {0}".format(test_cost)
 
                                 if output_test_accuracy:
                                     test_accuracy_perc = self.accuracy(test_data)
@@ -201,7 +217,7 @@ class Network(object):
                                     test_accuracy = (test_accuracy_perc*n_test)/100.0
                                     #print "Config {0}, Run {1}, Epoch {2}, Training Data Subsection {3}: {4}%".format(config_num, r, j, training_data_subsection_num, test_data_accuracy_perc)
                                     self.output_dict[r][j][training_data_subsection_num].append(test_accuracy_perc)
-                                    print "\tTest Accuracy: {0}%".format(test_accuracy_perc)
+                                    if print_results: print "\tTest Accuracy: {0}%".format(test_accuracy_perc)
                         '''
                         else:
                             print "Epoch {0} complete".format(j)
@@ -221,27 +237,27 @@ class Network(object):
                         if output_training_cost:
                             training_cost = self.total_cost(training_data, lmbda, convert=True)
                             self.output_dict[r][j].append(training_cost)
-                            print "\tTraining Cost: {0}".format(training_cost)
+                            if print_results: print "\tTraining Cost: {0}".format(training_cost)
                         if output_training_accuracy:
                             training_accuracy_perc = self.accuracy(training_data, convert=True)
                             self.output_dict[r][j].append(training_accuracy_perc)
-                            print "\tTraining Accuracy: {0}%".format(training_accuracy_perc)
+                            if print_results: print "\tTraining Accuracy: {0}%".format(training_accuracy_perc)
 
                         if validation_data:
                             if output_validation_cost:
                                 validation_cost = self.total_cost(validation_data, lmbda)
                                 self.output_dict[r][j].append(validation_cost)
-                                print "\tValidation Cost: {0}".format(validation_cost)
+                                if print_results: print "\tValidation Cost: {0}".format(validation_cost)
                             if output_validation_accuracy:
                                 validation_accuracy_perc = self.accuracy(validation_data)
                                 self.output_dict[r][j].append(validation_accuracy_perc)
-                                print "\tValidation Accuracy: {0}%".format(validation_accuracy_perc)
+                                if print_results: print "\tValidation Accuracy: {0}%".format(validation_accuracy_perc)
 
                         if test_data:
                             if output_test_cost:
                                 test_cost = self.total_cost(test_data, lmbda)
                                 self.output_dict[r][j].append(test_cost)
-                                print "\tTest Cost: {0}".format(test_cost)
+                                if print_results: print "\tTest Cost: {0}".format(test_cost)
 
                             if output_test_accuracy:
                                 test_accuracy_perc = self.accuracy(test_data)
@@ -249,7 +265,7 @@ class Network(object):
                                 test_accuracy = (test_accuracy_perc*n_test)/100.0
                                 #print "Config {0}, Run {1}, Epoch {2}, Training Data Subsection {3}: {4}%".format(config_num, r, j, training_data_subsection_num, test_data_accuracy_perc)
                                 self.output_dict[r][j].append(test_accuracy_perc)
-                                print "\tTest Accuracy: {0}%".format(test_accuracy_perc)
+                                if print_results: print "\tTest Accuracy: {0}%".format(test_accuracy_perc)
                     '''
                     if test_data:
                         test_data_accuracy = self.evaluate(test_data)
