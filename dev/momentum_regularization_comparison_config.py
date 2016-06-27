@@ -17,7 +17,7 @@ output_test_accuracy=True
 comparison_title="Momentum & Regularization Comparison"
 comparison_file="momentum_regularization_comparison"
 print_results = False
-update_output = True
+update_output = False
 graph_output = True
 #Will by default subplot the output types, will make config*outputs if that option is specified as well.
 subplot_seperate_configs = False
