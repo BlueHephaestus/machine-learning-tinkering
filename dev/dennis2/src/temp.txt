@@ -1,0 +1,420 @@
+Trying to run under a GPU.  If this is not desired, then modify network3.py
+to set the GPU flag to False.
+Epoch 0
+	Training Cost: 0.418166 OR MAYBE 0.825313
+	Training Accuracy: 50.000000%
+	Validation Accuracy: 50.000000%
+	This is the best training accuracy to date.
+	This is the best validation accuracy to date.
+	The corresponding test accuracy is 50.000000%
+Epoch 1
+	Training Cost: 0.366572 OR MAYBE 0.856167
+	Training Accuracy: 50.000000%
+	Validation Accuracy: 50.000000%
+Epoch 2
+	Training Cost: 0.359526 OR MAYBE 0.861121
+	Training Accuracy: 50.000000%
+	Validation Accuracy: 50.000000%
+Epoch 3
+	Training Cost: 0.356634 OR MAYBE 0.863281
+	Training Accuracy: 50.000000%
+	Validation Accuracy: 50.000000%
+Epoch 4
+	Training Cost: 0.354139 OR MAYBE 0.865076
+	Training Accuracy: 50.000000%
+	Validation Accuracy: 50.000000%
+Epoch 5
+	Training Cost: 0.351697 OR MAYBE 0.866683
+	Training Accuracy: 50.000000%
+	Validation Accuracy: 50.000000%
+Epoch 6
+	Training Cost: 0.349294 OR MAYBE 0.868114
+	Training Accuracy: 50.000000%
+	Validation Accuracy: 50.000000%
+Epoch 7
+	Training Cost: 0.346896 OR MAYBE 0.869330
+	Training Accuracy: 50.000000%
+	Validation Accuracy: 50.000000%
+Epoch 8
+	Training Cost: 0.344581 OR MAYBE 0.870265
+	Training Accuracy: 50.000000%
+	Validation Accuracy: 50.000000%
+Epoch 9
+	Training Cost: 0.342487 OR MAYBE 0.870847
+	Training Accuracy: 50.000000%
+	Validation Accuracy: 50.000000%
+Epoch 10
+	Training Cost: 0.340584 OR MAYBE 0.871086
+	Training Accuracy: 50.000000%
+	Validation Accuracy: 50.000000%
+Epoch 11
+	Training Cost: 0.338724 OR MAYBE 0.870898
+	Training Accuracy: 50.000000%
+	Validation Accuracy: 50.000000%
+Epoch 12
+	Training Cost: 0.337013 OR MAYBE 0.870284
+	Training Accuracy: 50.000000%
+	Validation Accuracy: 50.000000%
+Epoch 13
+	Training Cost: 0.335886 OR MAYBE 0.868991
+	Training Accuracy: 50.000000%
+	Validation Accuracy: 50.000000%
+Epoch 14
+	Training Cost: 0.334290 OR MAYBE 0.866358
+	Training Accuracy: 50.000000%
+	Validation Accuracy: 50.000000%
+Epoch 15
+	Training Cost: 0.332996 OR MAYBE 0.864453
+	Training Accuracy: 50.000000%
+	Validation Accuracy: 50.000000%
+Epoch 16
+	Training Cost: 0.329872 OR MAYBE 0.859869
+	Training Accuracy: 50.000000%
+	Validation Accuracy: 50.000000%
+Epoch 17
+	Training Cost: 0.332598 OR MAYBE 0.851607
+	Training Accuracy: 50.000000%
+	Validation Accuracy: 50.000000%
+Epoch 18
+	Training Cost: 0.330952 OR MAYBE 0.844032
+	Training Accuracy: 50.000000%
+	Validation Accuracy: 50.000000%
+Epoch 19
+	Training Cost: 0.326401 OR MAYBE 0.838277
+	Training Accuracy: 50.000000%
+	Validation Accuracy: 50.000000%
+Epoch 20
+	Training Cost: 0.322105 OR MAYBE 0.831926
+	Training Accuracy: 50.000000%
+	Validation Accuracy: 50.000000%
+Epoch 21
+	Training Cost: 0.308990 OR MAYBE 0.805921
+	Training Accuracy: 50.000000%
+	Validation Accuracy: 50.000000%
+Epoch 22
+	Training Cost: 0.296789 OR MAYBE 0.800427
+	Training Accuracy: 50.000000%
+	Validation Accuracy: 50.000000%
+Epoch 23
+	Training Cost: 0.262401 OR MAYBE 0.779727
+	Training Accuracy: 50.000000%
+	Validation Accuracy: 50.000000%
+Epoch 24
+	Training Cost: 0.270356 OR MAYBE 0.751036
+	Training Accuracy: 50.000000%
+	Validation Accuracy: 50.000000%
+Epoch 25
+	Training Cost: 0.196664 OR MAYBE 0.710563
+	Training Accuracy: 50.000000%
+	Validation Accuracy: 50.000000%
+Epoch 26
+	Training Cost: 0.174529 OR MAYBE 0.699342
+	Training Accuracy: 56.250000%
+	Validation Accuracy: 50.000000%
+	This is the best training accuracy to date.
+Epoch 27
+	Training Cost: 0.168795 OR MAYBE 0.663956
+	Training Accuracy: 62.500000%
+	Validation Accuracy: 67.500000%
+	This is the best training accuracy to date.
+	This is the best validation accuracy to date.
+	The corresponding test accuracy is 67.500000%
+Epoch 28
+	Training Cost: 0.158225 OR MAYBE 0.642313
+	Training Accuracy: 62.500000%
+	Validation Accuracy: 67.500000%
+Epoch 29
+	Training Cost: 0.149861 OR MAYBE 0.613410
+	Training Accuracy: 67.500000%
+	Validation Accuracy: 67.500000%
+	This is the best training accuracy to date.
+Epoch 30
+	Training Cost: 0.139930 OR MAYBE 0.587894
+	Training Accuracy: 73.750000%
+	Validation Accuracy: 67.500000%
+	This is the best training accuracy to date.
+Epoch 31
+	Training Cost: 0.128045 OR MAYBE 0.565414
+	Training Accuracy: 75.000000%
+	Validation Accuracy: 65.000000%
+	This is the best training accuracy to date.
+Epoch 32
+	Training Cost: 0.114893 OR MAYBE 0.549372
+	Training Accuracy: 78.750000%
+	Validation Accuracy: 62.500000%
+	This is the best training accuracy to date.
+Epoch 33
+	Training Cost: 0.110855 OR MAYBE 0.521054
+	Training Accuracy: 77.500000%
+	Validation Accuracy: 62.500000%
+Epoch 34
+	Training Cost: 0.108790 OR MAYBE 0.499677
+	Training Accuracy: 77.500000%
+	Validation Accuracy: 60.000000%
+Epoch 35
+	Training Cost: 0.106976 OR MAYBE 0.478630
+	Training Accuracy: 78.750000%
+	Validation Accuracy: 62.500000%
+Epoch 36
+	Training Cost: 0.106622 OR MAYBE 0.459584
+	Training Accuracy: 78.750000%
+	Validation Accuracy: 60.000000%
+Epoch 37
+	Training Cost: 0.106325 OR MAYBE 0.444731
+	Training Accuracy: 83.750000%
+	Validation Accuracy: 55.000000%
+	This is the best training accuracy to date.
+Epoch 38
+	Training Cost: 0.107605 OR MAYBE 0.434663
+	Training Accuracy: 86.250000%
+	Validation Accuracy: 50.000000%
+	This is the best training accuracy to date.
+Epoch 39
+	Training Cost: 0.112752 OR MAYBE 0.429203
+	Training Accuracy: 86.250000%
+	Validation Accuracy: 50.000000%
+Epoch 40
+	Training Cost: 0.111449 OR MAYBE 0.424978
+	Training Accuracy: 86.250000%
+	Validation Accuracy: 50.000000%
+Epoch 41
+	Training Cost: 0.104689 OR MAYBE 0.422414
+	Training Accuracy: 86.250000%
+	Validation Accuracy: 47.500000%
+Epoch 42
+	Training Cost: 0.102764 OR MAYBE 0.425740
+	Training Accuracy: 87.500000%
+	Validation Accuracy: 47.500000%
+	This is the best training accuracy to date.
+Epoch 43
+	Training Cost: 0.098698 OR MAYBE 0.433321
+	Training Accuracy: 87.500000%
+	Validation Accuracy: 47.500000%
+Epoch 44
+	Training Cost: 0.097635 OR MAYBE 0.444774
+	Training Accuracy: 87.500000%
+	Validation Accuracy: 47.500000%
+Epoch 45
+	Training Cost: 0.095994 OR MAYBE 0.458827
+	Training Accuracy: 87.500000%
+	Validation Accuracy: 47.500000%
+Epoch 46
+	Training Cost: 0.095029 OR MAYBE 0.475220
+	Training Accuracy: 87.500000%
+	Validation Accuracy: 47.500000%
+Epoch 47
+	Training Cost: 0.092784 OR MAYBE 0.493658
+	Training Accuracy: 87.500000%
+	Validation Accuracy: 50.000000%
+Epoch 48
+	Training Cost: 0.087514 OR MAYBE 0.514454
+	Training Accuracy: 83.750000%
+	Validation Accuracy: 50.000000%
+Epoch 49
+	Training Cost: 0.081590 OR MAYBE 0.537507
+	Training Accuracy: 83.750000%
+	Validation Accuracy: 52.500000%
+Epoch 50
+	Training Cost: 0.080880 OR MAYBE 0.563362
+	Training Accuracy: 83.750000%
+	Validation Accuracy: 52.500000%
+Epoch 51
+	Training Cost: 0.081368 OR MAYBE 0.592616
+	Training Accuracy: 83.750000%
+	Validation Accuracy: 52.500000%
+Epoch 52
+	Training Cost: 0.082223 OR MAYBE 0.627382
+	Training Accuracy: 83.750000%
+	Validation Accuracy: 52.500000%
+Epoch 53
+	Training Cost: 0.083561 OR MAYBE 0.672212
+	Training Accuracy: 83.750000%
+	Validation Accuracy: 52.500000%
+Epoch 54
+	Training Cost: 0.086397 OR MAYBE 0.724102
+	Training Accuracy: 83.750000%
+	Validation Accuracy: 52.500000%
+Epoch 55
+	Training Cost: 0.090602 OR MAYBE 0.759766
+	Training Accuracy: 83.750000%
+	Validation Accuracy: 52.500000%
+Epoch 56
+	Training Cost: 0.091660 OR MAYBE 0.814445
+	Training Accuracy: 83.750000%
+	Validation Accuracy: 52.500000%
+Epoch 57
+	Training Cost: 0.094864 OR MAYBE 0.837641
+	Training Accuracy: 83.750000%
+	Validation Accuracy: 52.500000%
+Epoch 58
+	Training Cost: 0.092002 OR MAYBE 0.912098
+	Training Accuracy: 83.750000%
+	Validation Accuracy: 52.500000%
+Epoch 59
+	Training Cost: 0.097785 OR MAYBE 0.930408
+	Training Accuracy: 83.750000%
+	Validation Accuracy: 52.500000%
+Epoch 60
+	Training Cost: 0.089180 OR MAYBE 0.962680
+	Training Accuracy: 87.500000%
+	Validation Accuracy: 52.500000%
+Epoch 61
+	Training Cost: 0.088761 OR MAYBE 1.030099
+	Training Accuracy: 87.500000%
+	Validation Accuracy: 52.500000%
+Epoch 62
+	Training Cost: 0.088220 OR MAYBE 1.103011
+	Training Accuracy: 87.500000%
+	Validation Accuracy: 52.500000%
+Epoch 63
+	Training Cost: 0.091298 OR MAYBE 1.182047
+	Training Accuracy: 87.500000%
+	Validation Accuracy: 52.500000%
+Epoch 64
+	Training Cost: 0.086719 OR MAYBE 1.267369
+	Training Accuracy: 87.500000%
+	Validation Accuracy: 52.500000%
+Epoch 65
+	Training Cost: 0.086145 OR MAYBE 1.359672
+	Training Accuracy: 87.500000%
+	Validation Accuracy: 52.500000%
+Epoch 66
+	Training Cost: 0.085710 OR MAYBE 1.459471
+	Training Accuracy: 87.500000%
+	Validation Accuracy: 52.500000%
+Epoch 67
+	Training Cost: 0.085138 OR MAYBE 1.567630
+	Training Accuracy: 87.500000%
+	Validation Accuracy: 52.500000%
+Epoch 68
+	Training Cost: 0.093183 OR MAYBE 1.685097
+	Training Accuracy: 87.500000%
+	Validation Accuracy: 52.500000%
+Epoch 69
+	Training Cost: 0.075611 OR MAYBE 2.279246
+	Training Accuracy: 82.500000%
+	Validation Accuracy: 52.500000%
+Epoch 70
+	Training Cost: 0.092397 OR MAYBE 2.857706
+	Training Accuracy: 85.000000%
+	Validation Accuracy: 52.500000%
+Epoch 71
+	Training Cost: 0.085887 OR MAYBE 3.080832
+	Training Accuracy: 85.000000%
+	Validation Accuracy: 52.500000%
+Epoch 72
+	Training Cost: 0.081845 OR MAYBE 3.321969
+	Training Accuracy: 85.000000%
+	Validation Accuracy: 52.500000%
+Epoch 73
+	Training Cost: 0.079265 OR MAYBE 3.582712
+	Training Accuracy: 85.000000%
+	Validation Accuracy: 52.500000%
+Epoch 74
+	Training Cost: 0.077581 OR MAYBE 3.864797
+	Training Accuracy: 85.000000%
+	Validation Accuracy: 52.500000%
+Epoch 75
+	Training Cost: 0.076465 OR MAYBE 4.170075
+	Training Accuracy: 85.000000%
+	Validation Accuracy: 52.500000%
+Epoch 76
+	Training Cost: 0.075718 OR MAYBE 4.500529
+	Training Accuracy: 85.000000%
+	Validation Accuracy: 52.500000%
+Epoch 77
+	Training Cost: 0.075215 OR MAYBE 4.858282
+	Training Accuracy: 85.000000%
+	Validation Accuracy: 52.500000%
+Epoch 78
+	Training Cost: 0.074876 OR MAYBE 5.245622
+	Training Accuracy: 85.000000%
+	Validation Accuracy: 52.500000%
+Epoch 79
+	Training Cost: 0.074650 OR MAYBE 5.665017
+	Training Accuracy: 85.000000%
+	Validation Accuracy: 52.500000%
+Epoch 80
+	Training Cost: 0.074499 OR MAYBE 6.119137
+	Training Accuracy: 85.000000%
+	Validation Accuracy: 52.500000%
+Epoch 81
+	Training Cost: 0.074400 OR MAYBE 6.610863
+	Training Accuracy: 85.000000%
+	Validation Accuracy: 52.500000%
+Epoch 82
+	Training Cost: 0.074334 OR MAYBE 7.143319
+	Training Accuracy: 85.000000%
+	Validation Accuracy: 52.500000%
+Epoch 83
+	Training Cost: 0.074292 OR MAYBE 7.719883
+	Training Accuracy: 85.000000%
+	Validation Accuracy: 52.500000%
+Epoch 84
+	Training Cost: 0.074264 OR MAYBE 8.344215
+	Training Accuracy: 85.000000%
+	Validation Accuracy: 52.500000%
+Epoch 85
+	Training Cost: 0.074246 OR MAYBE 9.020273
+	Training Accuracy: 85.000000%
+	Validation Accuracy: 52.500000%
+Epoch 86
+	Training Cost: 0.074234 OR MAYBE 9.752343
+	Training Accuracy: 85.000000%
+	Validation Accuracy: 52.500000%
+Epoch 87
+	Training Cost: 0.074229 OR MAYBE 10.545069
+	Training Accuracy: 85.000000%
+	Validation Accuracy: 52.500000%
+Epoch 88
+	Training Cost: 0.074223 OR MAYBE 11.403476
+	Training Accuracy: 85.000000%
+	Validation Accuracy: 52.500000%
+Epoch 89
+	Training Cost: 0.074220 OR MAYBE 12.333006
+	Training Accuracy: 85.000000%
+	Validation Accuracy: 52.500000%
+Epoch 90
+	Training Cost: 0.074218 OR MAYBE 13.339554
+	Training Accuracy: 85.000000%
+	Validation Accuracy: 52.500000%
+Epoch 91
+	Training Cost: 0.074219 OR MAYBE 14.429497
+	Training Accuracy: 85.000000%
+	Validation Accuracy: 52.500000%
+Epoch 92
+	Training Cost: 0.074218 OR MAYBE 15.609756
+	Training Accuracy: 85.000000%
+	Validation Accuracy: 52.500000%
+Epoch 93
+	Training Cost: 0.074220 OR MAYBE 16.887802
+	Training Accuracy: 85.000000%
+	Validation Accuracy: 52.500000%
+Epoch 94
+	Training Cost: 0.074221 OR MAYBE 18.271740
+	Training Accuracy: 85.000000%
+	Validation Accuracy: 52.500000%
+Epoch 95
+	Training Cost: 0.074219 OR MAYBE 19.770353
+	Training Accuracy: 85.000000%
+	Validation Accuracy: 52.500000%
+Epoch 96
+	Training Cost: 0.074219 OR MAYBE 21.393131
+	Training Accuracy: 85.000000%
+	Validation Accuracy: 52.500000%
+Epoch 97
+	Training Cost: 0.074222 OR MAYBE 23.150368
+	Training Accuracy: 85.000000%
+	Validation Accuracy: 52.500000%
+Epoch 98
+	Training Cost: 0.074221 OR MAYBE 25.053209
+	Training Accuracy: 85.000000%
+	Validation Accuracy: 52.500000%
+Epoch 99
+	Training Cost: 0.074219 OR MAYBE 27.113707
+	Training Accuracy: 85.000000%
+	Validation Accuracy: 52.500000%
+Finished training network.
+Best training accuracy: 87.500000% (not necessarily same epoch as the following
+Best validation accuracy of 67.500000% obtained at epoch 27
+Corresponding test accuracy of 67.500000%
